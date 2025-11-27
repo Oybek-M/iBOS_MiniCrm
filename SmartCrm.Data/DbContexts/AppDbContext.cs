@@ -31,8 +31,8 @@ namespace SmartCrm.Data.DbContexts
                 new User
                 {
                     Id = superAdminId,
-                    Username = "Tommy", 
-                    PasswordHash = "cd59680a1bb16445f3cbcec2ef65dcb53cd6f18832a5087f4b13dcda9d8fa409", // string tayyar
+                    Username = "ibosadmin", 
+                    PasswordHash = "66ed521ec69ee26bb006f4468ba88eb70998ee4582a1d1bdee6d24be4f0fcfac", // string tayyar
                     Role = Role.SuperAdministrator,
                     IsActive = true,
                     CreatedDate = new DateTime(2024, 05, 20, 0, 0, 0, DateTimeKind.Utc),

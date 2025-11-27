@@ -30,4 +30,8 @@
     <ProjectReference Include="..\SmartCrm.Service\SmartCrm.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Backups\" />
+  </ItemGroup>
+
 </Project>
