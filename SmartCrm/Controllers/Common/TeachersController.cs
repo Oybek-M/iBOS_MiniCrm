@@ -9,7 +9,7 @@ namespace SmartCrm.Controllers.Common
 {
     [Route("api/teachers")]
     [ApiController]
-    [Authorize(Roles = "SuperAdministrator, Administrator")]
+    [Authorize(Roles = "SuperAdministrator, Administrator, Teacher")]
     public class TeachersController : ControllerBase
     {
         private readonly ITeacherService _teacherService;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SmartCrm.Domain.Enums;
 using SmartCrm.Service.DTOs.Students;
 using SmartCrm.Service.Interfaces.Students;
@@ -38,6 +39,13 @@ namespace SmartCrm.Controllers.Common
         {
             var result = await _studentService.GetStudentsByPaymentStatusAsync(status);
             return Ok(result);
+        }
+
+        [HttpGet("group/{groupId:guid}", Name = "GetStudentsByGroupId")]
+        public async Task<IActionResult> GetStudentsByGroupIdAsync(Guid groupId)
+        {
+            var students = await _studentService.GetByGroupIdAsync(groupId);
+            return Ok(students);
         }
 
         [HttpGet("{id}", Name = "GetStudentById")] 

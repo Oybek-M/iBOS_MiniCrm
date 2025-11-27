@@ -88,6 +88,17 @@ namespace SmartCrm.Service.Services.Students
             return _mapper.Map<StudentDto>(student);
         }
 
+        public async Task<IEnumerable<StudentDto>> GetByGroupIdAsync(Guid id)
+        {
+            var students = await _unitOfWork.Student.GetAll()
+                .Where(s => s.GroupId == id)
+                .Include(s => s.Group)
+                .ThenInclude(s => s.Teacher)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<StudentDto>>(students);
+        }
+
         public async Task<StudentDto> UpdateAsync(Guid id, UpdateStudentDto dto)
         {
             var student = await _unitOfWork.Student.GetById(id);

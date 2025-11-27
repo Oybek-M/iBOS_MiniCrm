@@ -21,7 +21,7 @@ namespace SmartCrm.Controllers.Common
             _logger = logger;
         }
 
-        [Authorize(Roles = "SuperAdministrator, Administrator")]
+        [Authorize(Roles = "SuperAdministrator, Administrator, Teacher")]
         [HttpGet("role")]
         public IActionResult GetCurrentUserRole()
         {
@@ -67,6 +67,7 @@ namespace SmartCrm.Controllers.Common
             return Ok(updatedUser);
         }
 
+        [Authorize(Roles = "SuperAdministrator")]
         [HttpPatch("{id}/change-password")]
         public async Task<IActionResult> ChangePasswordAsync(Guid id, [FromBody] ChangePasswordDto dto)
         {
@@ -74,6 +75,7 @@ namespace SmartCrm.Controllers.Common
             return Ok(new { message = "Parol muvaffaqiyatli o'zgartirildi." });
         }
 
+        [Authorize(Roles = "SuperAdministrator")]
         [HttpPatch("{id}/change-status")]
         public async Task<IActionResult> ChangeStatusAsync(Guid id, [FromQuery] bool isActive)
         {
