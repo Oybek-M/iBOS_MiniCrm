@@ -1,0 +1,6 @@
+@SmartCrm_HostAddress = http://localhost:5070
+
+GET {{SmartCrm_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
