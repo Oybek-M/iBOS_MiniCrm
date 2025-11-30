@@ -12,7 +12,7 @@ using SmartCrm.Data.DbContexts;
 namespace SmartCrm.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250702091013_Initial")]
+    [Migration("20251130195517_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,50 @@ namespace SmartCrm.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("SmartCrm.Domain.Entities.Attendances.Attendance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text")
+                        .HasColumnName("note");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("student_id");
+
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("teacher_id");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("attendances");
+                });
 
             modelBuilder.Entity("SmartCrm.Domain.Entities.Groups.Group", b =>
                 {
@@ -179,18 +223,30 @@ namespace SmartCrm.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("last_name");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("phone_number");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("PhoneNumber")
+                    b.HasIndex("UserName")
                         .IsUnique();
 
                     b.ToTable("teachers");
@@ -207,9 +263,19 @@ namespace SmartCrm.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("first_name");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
                         .HasColumnName("is_active");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -241,12 +307,33 @@ namespace SmartCrm.Data.Migrations
                         {
                             Id = new Guid("a1b2c3d4-e5f6-7788-9900-aabbccddeeff"),
                             CreatedDate = new DateTime(2024, 5, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FirstName = "Behzodbek",
                             IsActive = true,
+                            LastName = "",
                             PasswordHash = "cd59680a1bb16445f3cbcec2ef65dcb53cd6f18832a5087f4b13dcda9d8fa409",
                             Role = 1,
                             UpdatedDate = new DateTime(2024, 5, 20, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Username = "Tommy"
+                            Username = "ibosadmin"
                         });
+                });
+
+            modelBuilder.Entity("SmartCrm.Domain.Entities.Attendances.Attendance", b =>
+                {
+                    b.HasOne("SmartCrm.Domain.Entities.Students.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartCrm.Domain.Entities.Teachers.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("SmartCrm.Domain.Entities.Groups.Group", b =>

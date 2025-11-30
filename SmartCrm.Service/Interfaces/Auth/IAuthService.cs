@@ -7,7 +7,6 @@ namespace SmartCrm.Service.Interfaces.Auth;
 public interface IAuthService
 {
     Task<UserDto> RegisterAdministratorAsync(AddUserDto addUserDto);
-    Task<UserDto> RegisterTeacherAsync(AddUserDto addUserDto);
 
 
     Task<string> LoginAsync(LoginDto loginDto);

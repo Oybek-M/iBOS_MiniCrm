@@ -67,33 +67,11 @@ namespace SmartCrm.Service.Services.Auth
 
             var newUser = new User
             {
+                FirstName = addUserDto.FirstName,
+                LastName = addUserDto.LastName,
                 Username = addUserDto.Username,
                 PasswordHash = PasswordHasher.GetHash(addUserDto.Password),
                 Role = Role.Administrator,
-                IsActive = true
-            };
-
-            await _unitOfWork.User.Add(newUser);
-
-            return _mapper.Map<UserDto>(newUser);
-        }
-
-        public async Task<UserDto> RegisterTeacherAsync(AddUserDto addUserDto)
-        {
-            var validationResult = await _addUserValidator.ValidateAsync(addUserDto);
-            if (!validationResult.IsValid)
-                throw new ValidatorException(string.Join("\n", validationResult.Errors.Select(e => e.ErrorMessage)));
-
-            var existingUser = await _unitOfWork.User.GetByUserNameAsync(addUserDto.Username);
-            if (existingUser is not null)
-                throw new StatusCodeException(HttpStatusCode.Conflict, $"'{addUserDto.Username}' nomli foydalanuvchi allaqachon mavjud.");
-
-
-            var newUser = new User
-            {
-                Username = addUserDto.Username,
-                PasswordHash = PasswordHasher.GetHash(addUserDto.Password),
-                Role = Role.Teacher,
                 IsActive = true
             };
 

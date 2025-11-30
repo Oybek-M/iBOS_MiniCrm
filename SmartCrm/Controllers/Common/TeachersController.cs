@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartCrm.Service.DTOs.Teachers;
 using SmartCrm.Service.Interfaces.Teachers;
-using System;
-using System.Threading.Tasks;
 
 namespace SmartCrm.Controllers.Common
 {

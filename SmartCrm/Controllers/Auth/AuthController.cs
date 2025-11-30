@@ -35,15 +35,6 @@ namespace SmartCrm.Controllers.Auth
 
             return CreatedAtRoute("GetUserById", new { id = newUser.Id }, newUser);
         }
-
-        [HttpPost("register/teacher")]
-        [Authorize(Roles = "SuperAdministrator")]
-        public async Task<IActionResult> RegisterTeacherAsync([FromBody] AddUserDto addUserDto)
-        {
-            var newUser = await _authService.RegisterTeacherAsync(addUserDto);
-
-            return CreatedAtRoute("GetUserById", new { id = newUser.Id }, newUser);
-        }
     }
 }
 

@@ -3,7 +3,9 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using SmartCrm.Data.Interfaces;
 using SmartCrm.Domain.Entities.Teachers;
+using SmartCrm.Domain.Enums;
 using SmartCrm.Service.Common.Exceptions;
+using SmartCrm.Service.Common.Security;
 using SmartCrm.Service.DTOs.Teachers;
 using SmartCrm.Service.Interfaces.Teachers;
 using System.Net;
@@ -37,7 +39,10 @@ namespace SmartCrm.Service.Services.Teachers
             {
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                PhoneNumber = dto.PhoneNumber
+                PhoneNumber = dto.PhoneNumber,
+                UserName = dto.UserName,
+                Password = PasswordHasher.GetHash(dto.Password),
+                Role = Role.Teacher
             };
             await _unitOfWork.Teacher.Add(newTeacher);
 
@@ -89,9 +94,13 @@ namespace SmartCrm.Service.Services.Teachers
             if (existingTeacher is not null)
                 throw new StatusCodeException(HttpStatusCode.Conflict, "Bu telefon raqami boshqa o'qituvchiga tegishli.");
 
+            var oldPasswordHash = PasswordHasher.GetHash(dto.OldPassword);
+            if (oldPasswordHash != teacher.Password) throw new StatusCodeException(HttpStatusCode.NotAcceptable, "Eski parolingiz mos kelmayapti.");
+
             teacher.FirstName = dto.FirstName;
             teacher.LastName = dto.LastName;
             teacher.PhoneNumber = dto.PhoneNumber;
+            teacher.Password = PasswordHasher.GetHash(dto.NewPassword);
 
             await _unitOfWork.Teacher.Update(teacher);
 

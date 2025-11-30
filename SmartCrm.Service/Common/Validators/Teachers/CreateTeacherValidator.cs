@@ -11,7 +11,11 @@ public class CreateTeacherValidator : AbstractValidator<CreateTeacherDto>
         RuleFor(dto => dto.LastName).NotEmpty().WithMessage("Familiya kiritilishi shart.");
 
         RuleFor(dto => dto.PhoneNumber)
-            .NotEmpty().WithMessage("Telefon raqam kiritilishi shart.")
-            .Matches(@"^\+998[0-9]{9}$").WithMessage("Telefon raqam noto'g'ri formatda. Masalan: +998991234567");
+            .NotEmpty()
+            .WithMessage("Telefon raqam kiritilishi shart.")
+            .Matches(@"^\+998[0-9]{9}$")
+            .WithMessage("Telefon raqam noto'g'ri formatda. Masalan: +998991234567");
+
+        RuleFor(dto => dto.Password).NotEmpty().WithMessage("Parol kiritilishi shart.");
     }
 }

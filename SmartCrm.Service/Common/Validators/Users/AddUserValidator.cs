@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using SmartCrm.Service.DTOs.Users;
+using System.Data;
 
 namespace SmartCrm.Service.Common.Validators.Users;
 
@@ -7,6 +8,8 @@ public class AddUserValidator : AbstractValidator<AddUserDto>
 {
     public AddUserValidator()
     {
+        RuleFor(dto => dto.FirstName).NotEmpty().WithMessage("Ism bo'lishi shart");
+
         RuleFor(dto => dto.Username).NotEmpty().MinimumLength(4)
             .WithMessage("Username kamida 4 belgidan iborat bo'lishi kerak.");
 

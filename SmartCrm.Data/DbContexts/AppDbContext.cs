@@ -25,14 +25,16 @@ namespace SmartCrm.Data.DbContexts
         {
             base.OnModelCreating(modelBuilder);
 
-            var superAdminId = new Guid("a1b2c3d4-e5f6-7788-9900-aabbccddeeff");
+            var superAdmin1Id = new Guid("a1b2c3d4-e5f6-7788-9900-aabbccddeeff");
 
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
-                    Id = superAdminId,
+                    Id = superAdmin1Id,
+                    FirstName = "Behzodbek",
+                    LastName = "",
                     Username = "ibosadmin", 
-                    PasswordHash = "66ed521ec69ee26bb006f4468ba88eb70998ee4582a1d1bdee6d24be4f0fcfac", // string tayyar
+                    PasswordHash = "cd59680a1bb16445f3cbcec2ef65dcb53cd6f18832a5087f4b13dcda9d8fa409", // ibos2025
                     Role = Role.SuperAdministrator,
                     IsActive = true,
                     CreatedDate = new DateTime(2024, 05, 20, 0, 0, 0, DateTimeKind.Utc),
@@ -40,12 +42,28 @@ namespace SmartCrm.Data.DbContexts
                 }
             );
 
+            //modelBuilder.Entity<User>().HasData(
+            //    new User
+            //    {
+            //        Id = "9768e4f1-4b2a-4ad3-ac96-8e07c7fe2630",
+            //        Username = "Tommy",
+            //        PasswordHash = "bb1cf1590e2f21e19aaa2e4241b619eefd01082da835cf4960275ba3c15d55f2", // O'ziniki
+            //        Role = Role.SuperAdministrator,
+            //        IsActive = true,
+            //        CreatedDate = new DateTime(2025, 11, 30, 0, 0, 0, DateTimeKind.Utc),
+            //        UpdatedDate = new DateTime(2025, 11, 30, 0, 0, 0, DateTimeKind.Utc)
+            //    }
+            //);
+
+
+
+
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
             modelBuilder.Entity<Teacher>()
-                .HasIndex(t => t.PhoneNumber)
+                .HasIndex(t => t.UserName)
                 .IsUnique();
 
             modelBuilder.Entity<Student>()

@@ -116,6 +116,24 @@ namespace SmartCrm.Service.Services.Users
             if (existingUser is not null)
                 throw new StatusCodeException(HttpStatusCode.Conflict, "Bu username allaqachon band.");
 
+            var changingPassword = !string.IsNullOrWhiteSpace(dto.OldPassword) || !string.IsNullOrWhiteSpace(dto.NewPassword);
+
+            if (changingPassword)
+            {
+                // both must be provided to change password
+                if (string.IsNullOrWhiteSpace(dto.OldPassword) || string.IsNullOrWhiteSpace(dto.NewPassword))
+                    throw new StatusCodeException(HttpStatusCode.BadRequest, "Parolni o'zgartirish uchun eski va yangi parollarni to'liq kiriting.");
+
+                var oldPasswordHash = PasswordHasher.GetHash(dto.OldPassword);
+                if (oldPasswordHash != user.PasswordHash)
+                    throw new StatusCodeException(HttpStatusCode.NotAcceptable, "Eski parolingiz mos kelmayapti.");
+
+                // set new password
+                user.PasswordHash = PasswordHasher.GetHash(dto.NewPassword);
+            }
+
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
             user.Username = dto.Username;
             await _unitOfWork.User.Update(user);
 

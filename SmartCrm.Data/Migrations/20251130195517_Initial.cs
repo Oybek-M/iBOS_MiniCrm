@@ -19,6 +19,9 @@ namespace SmartCrm.Data.Migrations
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     phone_number = table.Column<string>(type: "text", nullable: false),
+                    UserName = table.Column<string>(type: "text", nullable: false),
+                    password_hash = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -32,6 +35,8 @@ namespace SmartCrm.Data.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: false),
                     username = table.Column<string>(type: "text", nullable: false),
                     password_hash = table.Column<string>(type: "text", nullable: false),
                     role = table.Column<int>(type: "integer", nullable: false),
@@ -93,6 +98,36 @@ namespace SmartCrm.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "attendances",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    student_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    teacher_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
+                    note = table.Column<string>(type: "text", nullable: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_attendances", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_attendances_students_student_id",
+                        column: x => x.student_id,
+                        principalTable: "students",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_attendances_teachers_teacher_id",
+                        column: x => x.teacher_id,
+                        principalTable: "teachers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "payments",
                 columns: table => new
                 {
@@ -118,8 +153,18 @@ namespace SmartCrm.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "users",
-                columns: new[] { "id", "created_at", "is_active", "password_hash", "role", "updated_at", "username" },
-                values: new object[] { new Guid("a1b2c3d4-e5f6-7788-9900-aabbccddeeff"), new DateTime(2024, 5, 20, 0, 0, 0, 0, DateTimeKind.Utc), true, "cd59680a1bb16445f3cbcec2ef65dcb53cd6f18832a5087f4b13dcda9d8fa409", 1, new DateTime(2024, 5, 20, 0, 0, 0, 0, DateTimeKind.Utc), "Tommy" });
+                columns: new[] { "id", "created_at", "first_name", "is_active", "last_name", "password_hash", "role", "updated_at", "username" },
+                values: new object[] { new Guid("a1b2c3d4-e5f6-7788-9900-aabbccddeeff"), new DateTime(2024, 5, 20, 0, 0, 0, 0, DateTimeKind.Utc), "Behzodbek", true, "", "cd59680a1bb16445f3cbcec2ef65dcb53cd6f18832a5087f4b13dcda9d8fa409", 1, new DateTime(2024, 5, 20, 0, 0, 0, 0, DateTimeKind.Utc), "ibosadmin" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_attendances_student_id",
+                table: "attendances",
+                column: "student_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_attendances_teacher_id",
+                table: "attendances",
+                column: "teacher_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_groups_teacher_id",
@@ -143,9 +188,9 @@ namespace SmartCrm.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_teachers_phone_number",
+                name: "IX_teachers_UserName",
                 table: "teachers",
-                column: "phone_number",
+                column: "UserName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -158,6 +203,9 @@ namespace SmartCrm.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "attendances");
+
             migrationBuilder.DropTable(
                 name: "payments");
 
